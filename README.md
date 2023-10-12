@@ -19,9 +19,8 @@ memory game allows me to mesh the two!
 
 - As a user, I want to be able to start a new game with a sequence
 of length 1.
-- As a user, I want to be able to view my total games played, my
-highest score, and a chart showing how my daily average score
-is changing.
+- As a user, I want to be able to view my
+highest score.
 - As a user, (during a game) I want to be able to enter a sequence of
 defined sounds and receive the next sequence of sounds if correct, or
 end the game and add it to my list of total games if incorrect.

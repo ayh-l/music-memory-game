@@ -3,23 +3,29 @@ package model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static model.Sound.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class RoundTest {
     private Round testRound;
     private RoundHistory testRoundHistory;
+    private List<Sound> testSoundList;
 
     @BeforeEach
     public void setup() {
         testRound = new Round();
         testRoundHistory = new RoundHistory();
+        testRoundHistory.setCurrentRound(testRound);
+        testSoundList = new ArrayList<>();
     }
 
-    // (TODO: EDIT) NOTE: code is based on edX Abstraction 2: Testing a Data Abstraction / Extra Practice (Coin example)
+    // (REFERENCED: edX Abstraction 2: Testing a Data Abstraction / Extra Practice (Coin example))
     @Test
     public void testConstructor() {
-        assertEquals(testRound.getSoundList().size(), 0);
+        assertEquals(testRound.getSoundList().size(), 1);
 
         int timesSwitched = 0;
 
@@ -30,54 +36,45 @@ public class RoundTest {
                 timesSwitched++;
             }
         }
-
         assertTrue(timesSwitched > 0);
     }
 
     @Test
-    public void testNextSoundWrongSound() {
-        assertFalse(testRoundHistory.getRounds().contains(testRound));
+    public void testGuessSound() {
+        assertEquals(testRound.getSoundList().size(), 1);
+        testSoundList.add(testRound.getSoundList().get(0));
+        testSoundList.add(SOUND_2);
+        testSoundList.add(SOUND_3);
+        testRound.setSoundList(testSoundList);
 
-        Sound notNextSound;
-        if (testRound.getNextCorrectSound() == SOUND_0) {
-            notNextSound = Sound.SOUND_1;
-        } else {
-            notNextSound = SOUND_0;
-        }
-
-        assertFalse(testRound.nextSound(notNextSound, testRoundHistory));
-        assertTrue(testRoundHistory.getRounds().contains(testRound));
+        assertFalse(testRound.guessSound(2, SOUND_2));
+        assertTrue(testRound.guessSound(0, testRound.getNextCorrectSound()));
+        assertTrue(testRound.guessSound(1, SOUND_2));
     }
 
-    //(TODO: EDIT) NOTE: code is based on edX Abstraction 2: Testing a Data Abstraction / Extra Practice (Coin example)
+    // (REFERENCED: edX Abstraction 2: Testing a Data Abstraction / Extra Practice (Coin example))
     @Test
-    public void testNextSoundCorrectSound() {
-        assertFalse(testRoundHistory.getRounds().contains(testRound));
+    public void testSetNextCorrectSound() {
         Sound nextSound;
         Sound previousSound;
         int timesSwitched = 0;
+        assertEquals(testRound.getSoundList().size(), 1);
 
         for (int count = 1; count <= 100; count++) {
             previousSound = testRound.getNextCorrectSound();
+            testRound.setNextCorrectSound();
             nextSound = testRound.getNextCorrectSound();
-            assertTrue(testRound.nextSound(nextSound, testRoundHistory));
-            nextSound = testRound.getNextCorrectSound();
+            assertEquals(testRound.getSoundList().get(testRound.getSoundList().size() - 1),
+                    testRound.getNextCorrectSound());
 
             if (nextSound != previousSound) {
                 timesSwitched++;
             }
-            assertTrue(timesSwitched > 0);
         }
-
-        assertFalse(testRoundHistory.getRounds().contains(testRound));
-    }
-
-    @Test
-    public void testFindSound() {
-        assertEquals(testRound.findSound(0), SOUND_0);
-        assertEquals(testRound.findSound(1), SOUND_1);
-        assertEquals(testRound.findSound(2), SOUND_2);
-        assertEquals(testRound.findSound(3), SOUND_3);
+        assertTrue(timesSwitched > 0);
+        assertEquals(testRound.getSoundList().size(), 101);
+        assertFalse(testRoundHistory.getCompletedRounds().contains(testRound));
+        assertEquals(testRoundHistory.getCurrentRound(), testRound);
     }
 
 }
