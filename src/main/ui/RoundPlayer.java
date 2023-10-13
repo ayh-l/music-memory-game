@@ -42,7 +42,7 @@ public class RoundPlayer {
 
     // EFFECTS: runs a single round
     public void playRound() {
-        boolean isRoundOver = false;
+        boolean isRoundOver;
         roundHistory.startNewRound();
 
         displayInRoundMenu();
@@ -54,6 +54,7 @@ public class RoundPlayer {
             isRoundOver = makeGuess();
         }
 
+        roundHistory.finishRound();
         System.out.println("Incorrect - game over!");
     }
 
