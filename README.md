@@ -2,13 +2,11 @@
 
 ## Project Description: Memory Game
 
-This application will be a simple memory game where the player
-will have to remember a sequence of sounds. There will be four
+This application is a simple memory game where the player
+must remember a sequence of sounds. There are four
 types of sounds which will make up each sequence, and the
 sequence length will start at one sound, adding one new sound
-each time the player successfully remembers the sequence. There
-will also be a high-score feature and a history feature that
-allows players to listen to their previous sequences.
+each time the player successfully remembers the sequence.
 
 This application is meant for anyone who would like to test their
 memory or have a little bit of fun. I chose to create this application
@@ -26,3 +24,7 @@ defined sounds and receive the next sequence of sounds if correct, or
 end the game and add it to my list of total games if incorrect.
 - As a user, I want to be able to select a past game from my list of
 total games and play back the final sequence.
+- As a user, I want to be able to save my current game session (ie.
+all the rounds played during this session) if I so choose.
+- As a user, I want to be able to load my saved game data (ie. highscore,
+number of rounds played, etc.) if I so choose.
