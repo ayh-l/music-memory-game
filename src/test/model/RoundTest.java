@@ -1,5 +1,7 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -75,6 +77,21 @@ public class RoundTest {
         assertEquals(testRound.getSoundList().size(), 101);
         assertFalse(testRoundHistory.getCompletedRounds().contains(testRound));
         assertEquals(testRoundHistory.getCurrentRound(), testRound);
+    }
+
+    @Test
+    public void testRoundToJson() {
+        testSoundList.add(SOUND_1);
+        testSoundList.add(SOUND_2);
+        testSoundList.add(SOUND_3);
+        testRound.setNextCorrectSound(SOUND_3);
+        testRound.setSoundList(testSoundList);
+        JSONObject testJson = testRound.roundToJson();
+
+        assertEquals(((JSONArray) testJson.get("soundlist")).get(0), "1");
+        assertEquals(((JSONArray) testJson.get("soundlist")).get(1), "2");
+        assertEquals(((JSONArray) testJson.get("soundlist")).get(2), "3");
+        assertEquals(testJson.get("next sound"), "3");
     }
 
 }

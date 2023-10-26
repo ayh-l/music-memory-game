@@ -6,15 +6,23 @@ package ui;
 import model.Round;
 import model.RoundHistory;
 import model.Sound;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Objects;
 import java.util.Scanner;
 
 import static model.Sound.findSound;
 
+// Represents the round player application
 public class RoundPlayer {
-    RoundHistory roundHistory;
-    Scanner input;
+    private static final String JSON_STORE = "./data/roundHistory.json";
+    private RoundHistory roundHistory;
+    private Scanner input;
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
     public RoundPlayer() {
         runRoundPlayer();
@@ -36,11 +44,20 @@ public class RoundPlayer {
             }
         }
 
-        roundHistory.finishRound();
-
     }
 
-    // EFFECTS: runs a single round
+    // MODIFIES: this
+    // EFFECTS: initializes the round history
+    private void initializeRoundPlayer() {
+        roundHistory = new RoundHistory();
+        input = new Scanner(System.in);
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: runs a single round. adds the round to the round history's played rounds and updates number of rounds
+    //          played and high score (if necessary).
     public void playRound() {
         boolean isRoundOver;
         roundHistory.startNewRound();
@@ -74,20 +91,23 @@ public class RoundPlayer {
     // EFFECTS: prints potential actions when not in a round
     public void displayMainMenu() {
         System.out.println("Main Menu (input one of):");
-        System.out.println("New round -> 'n'");
-        System.out.println("View high score -> 'v'");
-        System.out.println("View number of rounds played -> 'r'");
-        System.out.println("Quit -> 'q'");
+        System.out.println("'n' -> New round");
+        System.out.println("'v' -> View high score");
+        System.out.println("'r' -> View number of rounds played");
+        System.out.println("'c' -> View completed rounds");
+        System.out.println("'s' -> Save round history to file");
+        System.out.println("'l' -> Load round history from file");
+        System.out.println("'q' -> Quit");
     }
 
     // EFFECTS: prints potential actions when in a round
     public void displayInRoundMenu() {
-        playCompleteSoundList(roundHistory.getCurrentRound());
+        playSoundList(roundHistory.getCurrentRound());
         System.out.println("Recite the pattern (input options):");
-        System.out.println("Sound 0 -> '0'");
-        System.out.println("Sound 1 -> '1'");
-        System.out.println("Sound 2 -> '2'");
-        System.out.println("Sound 3 -> '3'");
+        System.out.println("'0' -> Sound 0");
+        System.out.println("'1' -> Sound 1");
+        System.out.println("'2' -> Sound 2");
+        System.out.println("'3' -> Sound 3");
     }
 
     // EFFECTS: processes user's commands when not playing a round
@@ -98,22 +118,52 @@ public class RoundPlayer {
             System.out.println("High score is: " + roundHistory.getHighScore());
         } else if (Objects.equals(command, "r")) {
             System.out.println("Number of rounds played: " + roundHistory.getNumRoundsPlayed());
+        } else if (Objects.equals(command, "c")) {
+            viewAllCompletedRounds();
+        } else if (Objects.equals(command, "s")) {
+            saveRoundHistory();
+        } else if (Objects.equals(command, "l")) {
+            loadRoundHistory();
         } else {
             System.out.println("Unknown command given. Please input one of 'n'/'v'/'q'.");
         }
     }
 
-    // MODIFIES: this
-    // EFFECTS: initializes the round history
-    public void initializeRoundPlayer() {
-        roundHistory = new RoundHistory();
-        input = new Scanner(System.in);
-    }
-
     // EFFECTS: plays each sound in round's sound list (note: currently prints out strings rather than playing sounds)
-    public void playCompleteSoundList(Round round) {
+    public void playSoundList(Round round) {
         for (Sound s : round.getSoundList()) {
             System.out.println(s.getLabel());
+        }
+    }
+
+    // EFFECTS: prints out a list of all completed rounds and their sound lists
+    public void viewAllCompletedRounds() {
+        for (Round r : roundHistory.getCompletedRounds()) {
+            System.out.println("Round " + roundHistory.getCompletedRounds().indexOf(r) + ":");
+            playSoundList(r);
+        }
+    }
+
+    // EFFECTS: saves round history to file
+    private void saveRoundHistory() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(roundHistory);
+            jsonWriter.close();
+            System.out.println("Saved successfully to file " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Could not write to file " + JSON_STORE);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads saved round history from file
+    private void loadRoundHistory() {
+        try {
+            roundHistory = jsonReader.read();
+            System.out.println("Successfully loaded from file " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Could not load from file " + JSON_STORE);
         }
     }
 

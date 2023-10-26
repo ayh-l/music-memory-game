@@ -2,10 +2,12 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
-// Represents a list of completed rounds
+// Represents a history of completed rounds and relevant information
 public class RoundHistory {
-    private final List<Round> completedRounds;   // a list of all completed rounds
+    private List<Round> completedRounds;         // a list of all completed rounds
     private int highScore;                       // the highest score contained in the list of rounds
     private Round currentRound;                  // the current round (if any)
     private int numRoundsPlayed;                 // total number of rounds played
@@ -47,6 +49,32 @@ public class RoundHistory {
         this.setCurrentRound(newRound);
     }
 
+    // REQUIRES: int is <= number of completed rounds
+    // EFFECTS: returns the round at position int in the list of completed rounds
+    public Round selectCompletedRound(int i) {
+        return completedRounds.get(i);
+    }
+
+    // (REFERENCED: JsonSerializationDemo https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo)
+    // EFFECTS: returns the round history (completed rounds, high score, num rounds played, current round) as JSON array
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("highscore", highScore);
+        json.put("num rounds", numRoundsPlayed);
+        json.put("rounds", roundsToJson());
+        return json;
+    }
+
+    // (REFERENCED: JsonSerializationDemo https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo)
+    // EFFECTS: returns list of completed rounds as a JSON array
+    private JSONArray roundsToJson() {
+        JSONArray jsonArray = new JSONArray();
+        for (Round r : completedRounds) {
+            jsonArray.put(r.roundToJson());
+        }
+        return jsonArray;
+    }
+
 
     //setters
     public void setHighScore(int i) {
@@ -55,6 +83,10 @@ public class RoundHistory {
 
     public void setCurrentRound(Round r) {
         this.currentRound = r;
+    }
+
+    public void setNumRoundsPlayed(int i) {
+        this.numRoundsPlayed = i;
     }
 
     //getters

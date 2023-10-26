@@ -1,9 +1,13 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static java.lang.String.valueOf;
 import static model.Sound.*;
 
 // Represents a memory game round with a sound list and a status
@@ -25,6 +29,21 @@ public class Round {
         return this.soundList.get(index) == guess;
     }
 
+    // (REFERENCED: JsonSerializationDemo https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo)
+    // EFFECT: returns this round as a JSON object
+    public JSONObject roundToJson() {
+        JSONObject json = new JSONObject();
+        JSONArray soundlist = new JSONArray();
+
+        for (Sound s : this.getSoundList()) {
+            soundlist.put(String.valueOf(s.getLabel()));
+        }
+        json.put("soundlist", soundlist);
+        json.put("next sound", valueOf(this.nextCorrectSound.getLabel()));
+
+        return json;
+    }
+
     // (REFERENCED: https://www.educative.io/answers/how-to-generate-random-numbers-in-java)
     // REQUIRES: must only be called when creating a round or after a correct recitation of sound list
     // MODIFIES: this
@@ -35,6 +54,11 @@ public class Round {
         Sound nextSound = findSound(nextSoundLabel);
         this.nextCorrectSound = nextSound;
         this.soundList.add(nextSound);
+    }
+
+    // setters
+    public void setNextCorrectSound(Sound s) {
+        this.nextCorrectSound = s;
     }
 
     // getters
@@ -49,4 +73,5 @@ public class Round {
     public void setSoundList(List<Sound> sl) {
         this.soundList = sl;
     }
+
 }

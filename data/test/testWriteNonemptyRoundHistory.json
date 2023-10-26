@@ -1,0 +1,18 @@
+{
+    "highscore": 3,
+    "num rounds": 2,
+    "rounds": [
+        {
+            "next sound": "1",
+            "soundlist": [
+                "0",
+                "2",
+                "3"
+            ]
+        },
+        {
+            "next sound": "0",
+            "soundlist": ["3"]
+        }
+    ]
+}
