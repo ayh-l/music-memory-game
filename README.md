@@ -19,11 +19,11 @@ memory game allows me to mesh the two!
 of length 1.
 - As a user, I want to be able to view my
 highest score.
+- As a user, I want to be able to view the number of rounds I have played.
 - As a user, (during a game) I want to be able to enter a sequence of
 defined sounds and receive the next sequence of sounds if correct, or
 end the game and add it to my list of total games if incorrect.
-- As a user, I want to be able to select a past game from my list of
-total games and play back the final sequence.
+- As a user, I want to be able to view all the rounds I have played (with their list of sounds).
 - As a user, I want to be able to save my current game session (ie.
 all the rounds played during this session) if I so choose.
 - As a user, I want to be able to load my saved game data (ie. highscore,
