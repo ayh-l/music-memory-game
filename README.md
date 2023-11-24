@@ -31,8 +31,13 @@ number of rounds played, etc.) if I so choose.
 
 # Instructions for Grader
 
-- You can generate the first required action related to adding Xs to a Y by...
-- You can generate the second required action related to adding Xs to a Y by...
-- You can locate my visual component by...
-- You can save the state of my application by...
-- You can reload the state of my application by...
+- You can generate the first required action related to adding Xs to a Y by pressing "View game history", entering an
+integer into the field beside the "Filter rounds with scores >=" button and then clicking this button. This
+will filter the list of rounds to only display the rounds with scores above the given score.
+- You can generate the second required action related to adding Xs to a Y by pressing "View game history" and pressing
+"Play all sounds". This will cycle through the list of completed rounds and play their sound lists.
+- You can locate my visual component by pressing "Start new round", where you will see buttons with instrument icons.
+The buttons display a music note icon when pressed.
+- You can save the state of my application by pressing "Save round history".
+- You can reload the state of my application by pressing "Load round history".
+

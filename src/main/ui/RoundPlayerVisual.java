@@ -2,8 +2,6 @@ package ui;
 
 // (REFERENCED: https://docs.oracle.com/javase/tutorial/uiswing/layout/card.html)
 
-//TODO: remember max method length
-
 import model.RoundHistory;
 
 import javax.swing.*;
@@ -12,23 +10,23 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+// Represents a visual round player
 public class RoundPlayerVisual implements ActionListener {
     private static final String GAME_PANEL_TXT = "Round";
     private static final String MENU_PANEL_TXT = "Menu";
     private static final String HIST_PANEL_TXT = "History";
     private final GamePanel gp;
-    private final MenuPanel mp;
     private final HistoryPanel hp;
-    private RoundHistory roundHistory;
-    private final JFrame frame;
     private final JPanel cards;
+    private RoundHistory roundHistory;
 
+    // EFFECTS: constructs a visual round player with new game, menu and history panels. Displays the menu panel.
     public RoundPlayerVisual() {
         roundHistory = new RoundHistory();
-        gp = new GamePanel(roundHistory);
-        mp = new MenuPanel(this);
+        gp = new GamePanel(this);
+        MenuPanel mp = new MenuPanel(this);
         hp = new HistoryPanel(this);
-        frame = new JFrame();
+        JFrame frame = new JFrame();
 
         cards = new JPanel(new CardLayout());
         cards.setPreferredSize(new Dimension(500, 500));
@@ -48,29 +46,34 @@ public class RoundPlayerVisual implements ActionListener {
         frame.setResizable(false);
     }
 
+    // MODIFIES: this
+    // EFFECTS: according to the event, switches the visible panel and preps those panels as needed.
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
         CardLayout cl = (CardLayout)(cards.getLayout());
 
         if (command.equals("menu: new round")) {
-            //TODO
+            cl.show(cards, GAME_PANEL_TXT);
+            gp.reset();
         }
         if (command.equals("menu: history")) {
             hp.resetFilterDisplay();
             hp.update();
             cl.show(cards, HIST_PANEL_TXT);
         }
-        if (command.equals("hist: menu")) {
+        if (command.equals("hist: menu") || command.equals("game: menu")) {
             cl.show(cards, MENU_PANEL_TXT);
         }
     }
 
-    public RoundHistory getRoundHistory() {
-        return roundHistory;
-    }
-
+    // setters
     public void setRoundHistory(RoundHistory rh) {
         roundHistory = rh;
+    }
+
+    // getters
+    public RoundHistory getRoundHistory() {
+        return roundHistory;
     }
 
     public HistoryPanel getHistoryPanel() {

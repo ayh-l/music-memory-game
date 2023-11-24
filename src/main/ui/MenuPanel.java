@@ -4,8 +4,6 @@ package ui;
 //              https://stackoverflow.com/questions/6578205/swing-jlabel-text-change-on-the-running-application
 //              https://docs.oracle.com/javase/tutorial/uiswing/layout/box.html)
 
-//TODO cleanup, max method length
-
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
@@ -16,7 +14,7 @@ import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-//TODO: add documentation for all new classes!
+// Represents a menu panel with save, load and navigation buttons
 public class MenuPanel extends JPanel implements ActionListener {
     private static final String JSON_STORE = "./data/roundHistory.json";
     private final JsonWriter jsonWriter;
@@ -88,7 +86,6 @@ public class MenuPanel extends JPanel implements ActionListener {
         }
     }
 
-    // EFFECTS: saves round history to file
     private void saveRoundHistory() {
         try {
             jsonWriter.open();
@@ -100,8 +97,6 @@ public class MenuPanel extends JPanel implements ActionListener {
         }
     }
 
-    // MODIFIES: this
-    // EFFECTS: loads saved round history from file
     private void loadRoundHistory() {
         try {
             roundPlayerVisual.setRoundHistory(jsonReader.read());
