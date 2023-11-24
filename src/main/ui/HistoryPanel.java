@@ -16,8 +16,6 @@ public class HistoryPanel extends JPanel implements ActionListener {
     private static final String HIGH_SCORE_TXT = "High score: ";
     private static final String NUM_ROUNDS_TXT = "Number of rounds played: ";
     private static final String ROUND_HISTORY_TXT = "Round history: ";
-    private static final int LBL_WIDTH = 200;
-    private static final int LBL_HEIGHT = 30;
     private final RoundPlayerVisual roundPlayerVisual;
     private JLabel highScoreLabel;
     private JLabel numRoundsLabel;
@@ -45,16 +43,16 @@ public class HistoryPanel extends JPanel implements ActionListener {
 
     private void displayComponents() {
         add(backToMenuButton);
-        add(Box.createHorizontalStrut(10));
+        add(Box.createHorizontalStrut(500));
         add(highScoreLabel);
         add(numRoundsLabel);
-        add(Box.createHorizontalStrut(10));
+        add(Box.createHorizontalStrut(500));
         add(playSoundsButton);
         add(scoresAboveButton);
         add(textField);
         add(resetFilterButton);
         add(message);
-        add(Box.createHorizontalStrut(10));
+        add(Box.createHorizontalStrut(500));
         add(roundHistoryLabel);
         add(scrollPane);
     }
@@ -72,13 +70,14 @@ public class HistoryPanel extends JPanel implements ActionListener {
         scoresAboveButton.addActionListener(this);
         resetFilterButton.addActionListener(this);
         backToMenuButton.addActionListener(roundPlayerVisual);
+        playSoundsButton.setPreferredSize(new Dimension(300, 20));
 
         textField = new JTextField(4);
         textField.addActionListener(this);
     }
 
     private void initializePane() {
-        Dimension preferredPaneSize = new Dimension(400, 400);
+        Dimension preferredPaneSize = new Dimension(400, 300);
         textArea = new JTextArea();
         textArea.setPreferredSize(preferredPaneSize);
         scrollPane = new JScrollPane(textArea);
@@ -93,11 +92,10 @@ public class HistoryPanel extends JPanel implements ActionListener {
         roundHistoryLabel = new JLabel(ROUND_HISTORY_TXT);
         message = new JLabel("");
 
-        Dimension preferredSize = new Dimension(LBL_WIDTH, LBL_HEIGHT);
-        highScoreLabel.setPreferredSize(preferredSize);
-        numRoundsLabel.setPreferredSize(preferredSize);
-        roundHistoryLabel.setPreferredSize(preferredSize);
-        message.setPreferredSize(preferredSize);
+        highScoreLabel.setPreferredSize(new Dimension(100, 25));
+        numRoundsLabel.setPreferredSize(new Dimension(200, 25));
+        roundHistoryLabel.setPreferredSize(new Dimension(200, 25));
+        message.setPreferredSize(new Dimension(200, 25));
     }
 
     // MODIFIES: this
@@ -105,7 +103,7 @@ public class HistoryPanel extends JPanel implements ActionListener {
     public void update() {
         RoundHistory roundHistory = roundPlayerVisual.getRoundHistory();
         highScoreLabel.setText(HIGH_SCORE_TXT + roundHistory.getHighScore());
-        roundHistoryLabel.setText(ROUND_HISTORY_TXT + roundHistory.getNumRoundsPlayed());
+        numRoundsLabel.setText(NUM_ROUNDS_TXT + roundHistory.getNumRoundsPlayed());
         textArea.setText(returnAllCompletedRounds(minFilterScore));
         displayComponents();
     }
