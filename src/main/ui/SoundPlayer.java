@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.List;
+import java.util.Objects;
 
 // Represents a sound player that allows four different sounds to be played
 public class SoundPlayer implements ActionListener {
@@ -63,16 +64,16 @@ public class SoundPlayer implements ActionListener {
     // EFFECTS: according to the event e, plays the corresponding sound
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
-        if (command == "sound 0") {
+        if (Objects.equals(command, "sound 0")) {
             playSound(soundZero);
         }
-        if (command == "sound 1") {
+        if (Objects.equals(command, "sound 1")) {
             playSound(soundOne);
         }
-        if (command == "sound 2") {
+        if (Objects.equals(command, "sound 2")) {
             playSound(soundTwo);
         }
-        if (command == "sound 3") {
+        if (Objects.equals(command, "sound 3")) {
             playSound(soundThree);
         }
 

@@ -104,7 +104,6 @@ public class HistoryPanel extends JPanel implements ActionListener {
     // EFFECTS: updates history panel to display current info
     public void update() {
         RoundHistory roundHistory = roundPlayerVisual.getRoundHistory();
-        roundHistory = roundPlayerVisual.getRoundHistory();
         highScoreLabel.setText(HIGH_SCORE_TXT + roundHistory.getHighScore());
         roundHistoryLabel.setText(ROUND_HISTORY_TXT + roundHistory.getNumRoundsPlayed());
         textArea.setText(returnAllCompletedRounds(minFilterScore));
