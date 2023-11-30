@@ -1,24 +1,22 @@
 {
-    "highscore": 5,
+    "highscore": 4,
     "num rounds": 2,
     "rounds": [
         {
-            "next sound": "0",
+            "next sound": "2",
             "soundlist": [
-                "2",
-                "3",
                 "1",
-                "0"
+                "0",
+                "2"
             ]
         },
         {
-            "next sound": "2",
+            "next sound": "3",
             "soundlist": [
                 "3",
-                "2",
-                "3",
-                "0",
-                "2"
+                "1",
+                "1",
+                "3"
             ]
         }
     ]

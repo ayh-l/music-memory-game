@@ -7,15 +7,17 @@ import org.json.JSONObject;
 
 // Represents a history of completed rounds and relevant information
 public class RoundHistory {
-    private List<Round> completedRounds;         // a list of all completed rounds
-    private int highScore;                       // the highest score contained in the list of rounds
-    private Round currentRound;                  // the current round (if any)
-    private int numRoundsPlayed;                 // total number of rounds played
+    private final List<Round> completedRounds;      // a list of all completed rounds
+    private List<Round> completedRoundsToDisplay;   // a list of completed rounds to display (may be filtered)
+    private int highScore;                          // the highest score contained in the list of rounds
+    private Round currentRound;                     // the current round (if any)
+    private int numRoundsPlayed;                    // total number of rounds played
 
     // EFFECTS: constructs a new round history with an empty list of rounds, high score set to 0, no current round,
     //          and 0 total rounds played.
     public RoundHistory() {
         completedRounds = new ArrayList<>();
+        completedRoundsToDisplay = completedRounds;
         highScore = 0;
         currentRound = null;
         numRoundsPlayed = 0;
@@ -75,6 +77,22 @@ public class RoundHistory {
         return jsonArray;
     }
 
+    // MODIFIES: this
+    // EFFECTS: sets the completed rounds to display as a list of completed rounds >= min
+    public void filterCompletedRoundsToDisplay(int min) {
+        List<Round> toDisplay = new ArrayList<>();
+        resetCompletedRoundsToDisplay();
+        for (Round r : completedRoundsToDisplay) {
+            if (r.getSoundList().size() >= min) {
+                toDisplay.add(r);
+            }
+        }
+        completedRoundsToDisplay = toDisplay;
+    }
+
+    private void resetCompletedRoundsToDisplay() {
+        this.completedRoundsToDisplay = this.completedRounds;
+    }
 
     //setters
     public void setHighScore(int i) {
@@ -90,6 +108,10 @@ public class RoundHistory {
     }
 
     //getters
+    public List<Round> getCompletedRoundsToDisplay() {
+        return this.completedRoundsToDisplay;
+    }
+
     public List<Round> getCompletedRounds() {
         return this.completedRounds;
     }

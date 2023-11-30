@@ -42,6 +42,7 @@ public class HistoryPanel extends JPanel implements ActionListener {
     }
 
     private void displayComponents() {
+        this.removeAll();
         add(backToMenuButton);
         add(Box.createHorizontalStrut(500));
         add(highScoreLabel);
@@ -104,7 +105,7 @@ public class HistoryPanel extends JPanel implements ActionListener {
         RoundHistory roundHistory = roundPlayerVisual.getRoundHistory();
         highScoreLabel.setText(HIGH_SCORE_TXT + roundHistory.getHighScore());
         numRoundsLabel.setText(NUM_ROUNDS_TXT + roundHistory.getNumRoundsPlayed());
-        textArea.setText(returnAllCompletedRounds(minFilterScore));
+        textArea.setText(returnRoundsToDisplay(minFilterScore));
         displayComponents();
     }
 
@@ -116,10 +117,11 @@ public class HistoryPanel extends JPanel implements ActionListener {
         return soundList.toString();
     }
 
-    private String returnAllCompletedRounds(int min) {
+    private String returnRoundsToDisplay(int min) {
         RoundHistory roundHistory = roundPlayerVisual.getRoundHistory();
+        roundHistory.filterCompletedRoundsToDisplay(min);
         StringBuilder complete = new StringBuilder();
-        for (Round r : roundHistory.getCompletedRounds()) {
+        for (Round r : roundHistory.getCompletedRoundsToDisplay()) {
             if (r.getSoundList().size() >= min) {
                 complete.append("Round ").append(roundHistory.getCompletedRounds().indexOf(r))
                         .append(":").append("\n").append(returnSoundList(r)).append("\n \n");
@@ -127,6 +129,26 @@ public class HistoryPanel extends JPanel implements ActionListener {
         }
         return complete.toString();
     }
+
+//    private String returnSoundList(Round round) { //TODO remove
+//        StringBuilder soundList = new StringBuilder();
+//        for (Sound s : round.getSoundList()) {
+//            soundList.append("\n").append(s.getLabel()).append(" ");
+//        }
+//        return soundList.toString();
+//    }
+//
+//    private String returnAllCompletedRounds(int min) {
+//        RoundHistory roundHistory = roundPlayerVisual.getRoundHistory();
+//        StringBuilder complete = new StringBuilder();
+//        for (Round r : roundHistory.getCompletedRounds()) {
+//            if (r.getSoundList().size() >= min) {
+//                complete.append("Round ").append(roundHistory.getCompletedRounds().indexOf(r))
+//                        .append(":").append("\n").append(returnSoundList(r)).append("\n \n");
+//            }
+//        }
+//        return complete.toString();
+//    }
 
     // MODIFIES: this
     // EFFECTS: according to event, either plays the sound lists of all completed rounds, filters the display of
@@ -139,7 +161,7 @@ public class HistoryPanel extends JPanel implements ActionListener {
             playAllRounds(roundHistory);
         }
         if (command.equals("filter")) {
-            textArea.setText(returnAllCompletedRounds(minFilterScore));
+            textArea.setText(returnRoundsToDisplay(minFilterScore));
             update();
         }
         if (command.equals("undo filter")) {
@@ -156,7 +178,7 @@ public class HistoryPanel extends JPanel implements ActionListener {
 
     private void playAllRounds(RoundHistory roundHistory) {
         SoundPlayer sp = new SoundPlayer();
-        for (Round r : roundHistory.getCompletedRounds()) {
+        for (Round r : roundHistory.getCompletedRoundsToDisplay()) {
             try {
                 sp.playSoundList(r);
             } catch (InterruptedException ex) {
@@ -169,6 +191,6 @@ public class HistoryPanel extends JPanel implements ActionListener {
     // EFFECTS: resets history panel to display all completed rounds (removing filter)
     public void resetFilterDisplay() {
         minFilterScore = 1;
-        textArea.setText(returnAllCompletedRounds(minFilterScore));
+        textArea.setText(returnRoundsToDisplay(1));
     }
 }
