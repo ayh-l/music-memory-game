@@ -55,6 +55,8 @@ public class GamePanel extends JPanel implements ActionListener {
         playSoundList();
     }
 
+    // MODIFIES: this
+    // EFFECTS: initializes buttons
     private void initializeButtons() {
         ImageIcon soundZeroImage = new ImageIcon("./data/trumpet.png");
         ImageIcon soundOneImage = new ImageIcon("./data/saxophone.png");
@@ -75,6 +77,7 @@ public class GamePanel extends JPanel implements ActionListener {
         makeGuessButton.setPreferredSize(new Dimension(100, 50));
     }
 
+    // EFFECTS: returns a button with given imageIcon as its icon
     private JButton initializeButton(ImageIcon imageIcon) {
         Dimension preferredSize = new Dimension(100, 100);
         ImageIcon playImage = new ImageIcon("./data/music-note.png");
@@ -98,6 +101,7 @@ public class GamePanel extends JPanel implements ActionListener {
         }
     }
 
+    // EFFECTS: plays given sound
     private void playSound(Sound s) throws InterruptedException {
         int label = s.getLabel();
         JButton button = null;
@@ -142,6 +146,8 @@ public class GamePanel extends JPanel implements ActionListener {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: finishes the round, adding it to the round history
     private void incorrectGuess() {
         inGuess = false;
         roundPlayerVisual.getRoundHistory().finishRound();
@@ -149,6 +155,8 @@ public class GamePanel extends JPanel implements ActionListener {
         roundPlayerVisual.actionPerformed(new ActionEvent(this, 0, "game: menu"));
     }
 
+    // MODIFIES: this
+    // EFFECTS: continues round, adding the next sound to the round
     private void correctGuess(List<Sound> soundList) {
         guessCount++;
         if (guessCount == soundList.size()) {

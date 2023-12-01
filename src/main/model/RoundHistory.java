@@ -29,6 +29,8 @@ public class RoundHistory {
     //          Updates high score if applicable, and adds 1 to the total number of rounds played.
     public void finishRound() {
         this.addRound(this.currentRound);
+        EventLog.getInstance().logEvent(new Event("Added a round with score "
+                + this.currentRound.getSoundList().size()));
         this.currentRound = null;
         this.numRoundsPlayed++;
     }
@@ -88,10 +90,25 @@ public class RoundHistory {
             }
         }
         completedRoundsToDisplay = toDisplay;
+        EventLog.getInstance().logEvent(new Event("Filtered out rounds with scores below " + min));
     }
 
+    // MODIFIES: this
+    // EFFECTS: resets completed rounds to display as the total list of completed rounds
     private void resetCompletedRoundsToDisplay() {
         this.completedRoundsToDisplay = this.completedRounds;
+        EventLog.getInstance().logEvent(new Event("Filter was reset"));
+    }
+
+    // MODIFIES: this
+    // EFFECTS: resets this round history to state at intialization
+    public void reset() {
+        completedRounds.clear();
+        completedRoundsToDisplay = completedRounds;
+        highScore = 0;
+        currentRound = null;
+        numRoundsPlayed = 0;
+        EventLog.getInstance().logEvent(new Event("All rounds were removed from history"));
     }
 
     //setters

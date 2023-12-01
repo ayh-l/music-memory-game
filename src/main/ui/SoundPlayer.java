@@ -35,6 +35,7 @@ public class SoundPlayer implements ActionListener {
         }
     }
 
+    // EFFECTS: plays given sound
     private void playSound(Sound s) {
         int label = s.getLabel();
         if (label == 0) {

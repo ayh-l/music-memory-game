@@ -29,15 +29,63 @@ all the rounds played during this session) if I so choose.
 - As a user, I want to be able to load my saved game data (ie. highscore,
 number of rounds played, etc.) if I so choose.
 
-# Instructions for Grader
+## Instructions for Grader
 
 - You can generate the first required action related to adding Xs to a Y by pressing "View game history", entering an
 integer into the field beside the "Filter rounds with scores >=" button and then clicking this button. This
 will filter the list of rounds to only display the rounds with scores above the given score.
 - You can generate the second required action related to adding Xs to a Y by pressing "View game history" and pressing
-"Play all sounds". This will cycle through the list of completed rounds and play their sound lists.
+"Remove all rounds". This will remove all the rounds stored in the history and reset the high score and the number of
+played rounds.
 - You can locate my visual component by pressing "Start new round", where you will see buttons with instrument icons.
 The buttons display a music note icon when pressed.
 - You can save the state of my application by pressing "Save round history".
 - You can reload the state of my application by pressing "Load round history".
 
+## Phase 4: Task 2
+Fri Dec 01 15:35:48 PST 2023
+Filter was reset
+
+
+Fri Dec 01 15:35:48 PST 2023
+Filtered out rounds with scores below 5
+
+
+Fri Dec 01 15:35:50 PST 2023
+Filter was reset
+
+
+Fri Dec 01 15:35:50 PST 2023
+Filtered out rounds with scores below 1
+
+
+Fri Dec 01 15:35:51 PST 2023
+All rounds were removed from history
+
+
+Fri Dec 01 15:35:57 PST 2023
+Added a round with score 2
+
+
+Fri Dec 01 15:35:59 PST 2023
+Filter was reset
+
+
+Fri Dec 01 15:35:59 PST 2023
+Filtered out rounds with scores below 1
+
+## Phase 4: Task 3
+After reflecting on the structure of my project through the UML diagram, I noticed some unnecessary associations.
+For instance, Round has an association with Sound which I realize is unnecessary, as I could store sounds using their
+int labels instead. Perhaps one of the most problematic aspects I noticed, however,
+is the amount of coupling within the ui package, which I found to be problematic. The coupling is a result of each panel
+needing access to the RoundPlayerVisual in order to access the current RoundHistory, and I believe these associations
+can be significantly reduced by applying the Singleton pattern onto the RoundHistory class. Doing so would be suitable,
+as there is only ever one RoundHistory at a time, and would remove the need for each panel (HistoryPanel, GamePanel and 
+MenuPanel) to be associated with
+RoundPlayerVisual, and for RoundPlayerVisual to be associated with RoundHistory. I believe I can also remove the
+associations from RoundPlayerVisual to HistoryPanel and to GamePanel using the Observer pattern. I created these
+associations for the purpose of updating the panels before displaying each panel, and implementing the Observer pattern
+(where RoundPlayerVisual would be the Subject and HistoryPanel and GamePanel would be the Observers) would allow me
+to reduce coupling by allowing each panel to manage its own updating processes through notification by the
+RoundPlayerVisual that the display will be changing.

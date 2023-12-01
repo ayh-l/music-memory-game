@@ -2,6 +2,7 @@ package ui;
 
 // (REFERENCED: https://docs.oracle.com/javase/tutorial/uiswing/layout/card.html)
 
+import model.EventLog;
 import model.RoundHistory;
 
 import javax.swing.*;
@@ -9,9 +10,11 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 // Represents a visual round player
-public class RoundPlayerVisual implements ActionListener {
+public class RoundPlayerVisual implements ActionListener, WindowListener {
     private static final String GAME_PANEL_TXT = "Round";
     private static final String MENU_PANEL_TXT = "Menu";
     private static final String HIST_PANEL_TXT = "History";
@@ -36,7 +39,7 @@ public class RoundPlayerVisual implements ActionListener {
         CardLayout cl = (CardLayout)(cards.getLayout());
         cl.show(cards, MENU_PANEL_TXT);
 
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.setPreferredSize(new Dimension(500, 500));
         ((JPanel) frame.getContentPane()).setBorder(new EmptyBorder(13, 13, 13, 13));
         frame.add(cards);
@@ -44,6 +47,7 @@ public class RoundPlayerVisual implements ActionListener {
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
+        frame.addWindowListener(this);
     }
 
     // MODIFIES: this
@@ -66,6 +70,44 @@ public class RoundPlayerVisual implements ActionListener {
         }
     }
 
+    // (REFRENCED: AlarmSystem - Screen Printer - printLog())
+    // EFFECTS: upon window closing, prints out all activity from startup
+    @Override
+    public void windowClosed(WindowEvent e) {
+        for (model.Event next : EventLog.getInstance()) {
+            System.out.println(next.toString() + "\n\n");
+        }
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+    }
+
     // setters
     public void setRoundHistory(RoundHistory rh) {
         roundHistory = rh;
@@ -79,5 +121,4 @@ public class RoundPlayerVisual implements ActionListener {
     public HistoryPanel getHistoryPanel() {
         return hp;
     }
-
 }

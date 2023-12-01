@@ -16,12 +16,12 @@ public class HistoryPanel extends JPanel implements ActionListener {
     private static final String HIGH_SCORE_TXT = "High score: ";
     private static final String NUM_ROUNDS_TXT = "Number of rounds played: ";
     private static final String ROUND_HISTORY_TXT = "Round history: ";
-    private final RoundPlayerVisual roundPlayerVisual;
     private JLabel highScoreLabel;
     private JLabel numRoundsLabel;
     private JLabel roundHistoryLabel;
     private JLabel message;
     private JButton playSoundsButton;
+    private JButton removeAllRoundsButton;
     private JButton scoresAboveButton;
     private JButton resetFilterButton;
     private JButton backToMenuButton;
@@ -29,6 +29,7 @@ public class HistoryPanel extends JPanel implements ActionListener {
     private JTextArea textArea;
     private JTextField textField;
     private int minFilterScore;
+    private final RoundPlayerVisual roundPlayerVisual;
 
 
     // EFFECTS: constructs a history panel with given round history
@@ -41,6 +42,8 @@ public class HistoryPanel extends JPanel implements ActionListener {
         displayComponents();
     }
 
+    // MODIFIES: this
+    // EFFECTS: displays components
     private void displayComponents() {
         this.removeAll();
         add(backToMenuButton);
@@ -49,6 +52,7 @@ public class HistoryPanel extends JPanel implements ActionListener {
         add(numRoundsLabel);
         add(Box.createHorizontalStrut(500));
         add(playSoundsButton);
+        add(removeAllRoundsButton);
         add(scoresAboveButton);
         add(textField);
         add(resetFilterButton);
@@ -58,27 +62,35 @@ public class HistoryPanel extends JPanel implements ActionListener {
         add(scrollPane);
     }
 
+    // MODIFIES: this
+    // EFFECTS: initializes buttons and field
     private void initializeButtonsAndField() {
         playSoundsButton = new JButton("Play all sounds");
         scoresAboveButton = new JButton("Filter rounds with scores >= ");
         resetFilterButton = new JButton("Reset rounds filter");
         backToMenuButton = new JButton("Return to menu");
+        removeAllRoundsButton = new JButton("Remove all rounds");
         playSoundsButton.setActionCommand("play sounds");
         scoresAboveButton.setActionCommand("filter");
         resetFilterButton.setActionCommand("undo filter");
         backToMenuButton.setActionCommand("hist: menu");
+        removeAllRoundsButton.setActionCommand("remove rounds");
         playSoundsButton.addActionListener(this);
         scoresAboveButton.addActionListener(this);
         resetFilterButton.addActionListener(this);
         backToMenuButton.addActionListener(roundPlayerVisual);
-        playSoundsButton.setPreferredSize(new Dimension(300, 20));
+        removeAllRoundsButton.addActionListener(this);
+        playSoundsButton.setPreferredSize(new Dimension(150, 20));
+        removeAllRoundsButton.setPreferredSize(new Dimension(150, 20));
 
         textField = new JTextField(4);
         textField.addActionListener(this);
     }
 
+    // MODIFIES: this
+    // EFFECTS: initializes pane
     private void initializePane() {
-        Dimension preferredPaneSize = new Dimension(400, 300);
+        Dimension preferredPaneSize = new Dimension(400, 1000);
         textArea = new JTextArea();
         textArea.setPreferredSize(preferredPaneSize);
         scrollPane = new JScrollPane(textArea);
@@ -86,6 +98,8 @@ public class HistoryPanel extends JPanel implements ActionListener {
         resetFilterDisplay();
     }
 
+    // MODIFIES: this
+    // EFFECTS: initializes labels
     private void initializeLabels() {
         RoundHistory roundHistory = roundPlayerVisual.getRoundHistory();
         highScoreLabel = new JLabel(HIGH_SCORE_TXT + roundHistory.getHighScore());
@@ -109,6 +123,7 @@ public class HistoryPanel extends JPanel implements ActionListener {
         displayComponents();
     }
 
+    // EFFECTS: returns given round's sound list in string form
     private String returnSoundList(Round round) {
         StringBuilder soundList = new StringBuilder();
         for (Sound s : round.getSoundList()) {
@@ -117,6 +132,7 @@ public class HistoryPanel extends JPanel implements ActionListener {
         return soundList.toString();
     }
 
+    // EFFECTS: returns the rounds to display in string form
     private String returnRoundsToDisplay(int min) {
         RoundHistory roundHistory = roundPlayerVisual.getRoundHistory();
         roundHistory.filterCompletedRoundsToDisplay(min);
@@ -129,26 +145,6 @@ public class HistoryPanel extends JPanel implements ActionListener {
         }
         return complete.toString();
     }
-
-//    private String returnSoundList(Round round) { //TODO remove
-//        StringBuilder soundList = new StringBuilder();
-//        for (Sound s : round.getSoundList()) {
-//            soundList.append("\n").append(s.getLabel()).append(" ");
-//        }
-//        return soundList.toString();
-//    }
-//
-//    private String returnAllCompletedRounds(int min) {
-//        RoundHistory roundHistory = roundPlayerVisual.getRoundHistory();
-//        StringBuilder complete = new StringBuilder();
-//        for (Round r : roundHistory.getCompletedRounds()) {
-//            if (r.getSoundList().size() >= min) {
-//                complete.append("Round ").append(roundHistory.getCompletedRounds().indexOf(r))
-//                        .append(":").append("\n").append(returnSoundList(r)).append("\n \n");
-//            }
-//        }
-//        return complete.toString();
-//    }
 
     // MODIFIES: this
     // EFFECTS: according to event, either plays the sound lists of all completed rounds, filters the display of
@@ -167,6 +163,10 @@ public class HistoryPanel extends JPanel implements ActionListener {
         if (command.equals("undo filter")) {
             resetFilterDisplay();
             update();
+        }
+        if (command.equals("remove rounds")) {
+            roundPlayerVisual.getRoundHistory().reset();
+            update();
         } else {
             try {
                 minFilterScore = Integer.parseInt(textField.getText());
@@ -176,6 +176,7 @@ public class HistoryPanel extends JPanel implements ActionListener {
         }
     }
 
+    // EFFECTS: plays the sounds of each round in roundHistory
     private void playAllRounds(RoundHistory roundHistory) {
         SoundPlayer sp = new SoundPlayer();
         for (Round r : roundHistory.getCompletedRoundsToDisplay()) {

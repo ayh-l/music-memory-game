@@ -41,6 +41,8 @@ public class MenuPanel extends JPanel implements ActionListener {
         display();
     }
 
+    // MODIFIES: this
+    // EFFECTS: displays components
     private void display() {
         this.add(titleLabel);
         this.add(Box.createRigidArea(new Dimension(0, 15)));
@@ -52,11 +54,15 @@ public class MenuPanel extends JPanel implements ActionListener {
         setVisible(true);
     }
 
+    // MODIFIES: this
+    // EFFECTS: initializes labels
     private void initializeLabels() {
         titleLabel = new JLabel("MENU");
         message = new JLabel("");
     }
 
+    // MODIFIES: this
+    // EFFECTS: initializes buttons
     private void initializeButtons(RoundPlayerVisual rpv) {
         newRoundButton = new JButton("Start new round");
         roundHistoryButton = new JButton("View game history");
@@ -86,6 +92,7 @@ public class MenuPanel extends JPanel implements ActionListener {
         }
     }
 
+    // EFFECTS: saves round history to file
     private void saveRoundHistory() {
         try {
             jsonWriter.open();
@@ -97,6 +104,8 @@ public class MenuPanel extends JPanel implements ActionListener {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: loads round history from file
     private void loadRoundHistory() {
         try {
             roundPlayerVisual.setRoundHistory(jsonReader.read());
